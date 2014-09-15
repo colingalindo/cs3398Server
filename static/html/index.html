@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<script src="/js/jquery-2.1.1.js"></script>
+		<script src="/js/react-0.11.1.js"></script>
+		<script src="/js/JSXTransformer-0.11.1.js"></script>
+		<script src="/js/ladda.js"></script>
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="/css/bootstrap.css" />
+		<link rel="stylesheet" href="/css/ladda-themeless.min.css"/>
+		<link rel="stylesheet" href="/css/login.css"/>
+		<link rel="stylesheet" href="/css/dashboard.css">
+
+		<!-- make sure to replace these with minified versions in production. -->
+		<script src="/js/bootstrap.js"></script>
+		<script src="/js/spin.js"></script>
+		<script src="/js/ladda.js"></script>
+
+
+		<!-- application specfic files. In production these should be rolled together and minified. -->
+		<script type="text/jsx" src="/js/accountinfo.jsx"></script>
+		<script type="text/jsx" src="/js/topnav.jsx"></script>
+		<script type="text/jsx">
+		  	/**
+			 * @jsx React.DOM
+			 */
+
+			var LoginBox = React.createClass({
+			  getInitialState: function() {
+			    return {
+			    	username:null, 
+			    	password:null
+			    };
+			  },
+		      handleChangeUsername: function(event) {
+			    this.setState({username: event.target.value});
+			  },
+		      handleChangePassword: function(event) {
+			    this.setState({password: event.target.value});
+			  },
+			  handleLogin: function(event) {
+			  	if(!this.state.username || !this.state.password)
+			  	{
+			  		return;
+			  	} 
+			  	event.preventDefault();
+
+			  	var ladda = Ladda.create($("#login-button")[0]);
+			  	var self = this
+			  	ladda.start();
+
+			  	var LOGIN_DELAY = 500;
+			  	
+			  	$.ajax("/api/v1.0/myaccount", {
+			  		type: "GET",
+			  		accepts: "text/javascript",
+			  		async: true,
+			  		complete: function(xhr, status) {
+				    	setTimeout(function(){
+				    		ladda.stop();
+				    	}, LOGIN_DELAY);
+			  		},
+			  		contentType: "application/json",
+			  		dataType: "json",
+			  		error: function(xhr, status, error) {
+			  			console.log("error: " + status + " " + error);
+			  		},
+			  		headers: {
+				      "Authorization": "Basic " + btoa(this.state.username + ":" + this.state.password)
+				    },
+				    success: function(data, textStatus, xhr) {
+				    	
+				    	setTimeout(function(){
+				    		self.props.onLogin(self.state.username, self.state.password);
+				    	}, LOGIN_DELAY);
+				    }
+			  	});
+			  },
+			  render: function() {
+			    return  (
+	    	      	<form className="form-signin" role="form">
+				        <h2 className="form-signin-heading">Please sign in</h2>
+				        <input 
+				        	id="login-username"
+				        	type="text" 
+				        	className="form-control" 
+				        	placeholder="User Name" 
+				        	onChange={this.handleChangeUsername}
+				        	required autofocus>
+				        </input>
+				        <input 
+				        	id="login-password" 
+				        	type="password" 
+				        	className="form-control" 
+				        	placeholder="Password" 
+				        	onChange={this.handleChangePassword} 
+				        	required>
+			            </input>
+
+				        <button 
+					        id="login-button" 
+				        	className="btn btn-lg btn-primary ladda-button" 
+				        	type="submit"
+				        	onClick={this.handleLogin}
+				        	data-style="expand-right" >
+				        	Sign in
+				        </button>
+				    </form>
+			    )
+			  }
+			});
+
+			STATE_START = 0;
+			STATE_READY = 2;
+
+			var App = React.createClass({
+			  getInitialState: function() {
+			    return {
+			    	username:'asdf', 
+			    	password:'boo',
+			    	login_state: STATE_START
+			    };
+			  },
+			  getState: function() {
+			  	return $.extend(true, {}, this.state);
+			  },
+			  pushState: function() {
+			  	history.pushState(this.getState());
+			  },
+			  componentDidMount: function() {
+			  	var self = this;
+			  	$(window).bind('popstate', function(event) {
+			  		self.setState(event.originalEvent.state);
+			  	});
+			  },
+			  setCredentials: function(username, password) {
+			  	this.pushState();
+			  	this.setState({username: username, password: password, login_state: STATE_READY})
+			  },
+			  logout: function() {
+			  	// we reload the page to get rid of the user credentials... Needs more testing.
+			  	document.location.reload(true);
+			  },
+			  render: function() {
+			  	var login_area;
+			  	if(this.state.login_state == STATE_START)
+			  	{
+			  		contents = <LoginBox 
+			  						username={this.state.username} 
+			  						password={this.state.password} 
+			  						onLogin={this.setCredentials} />
+			  	}
+			  	else
+			  	{
+			  		contents = <AccountInfo 
+			  						username={this.state.username} 
+			  						password={this.state.password}
+			  						onLogout={this.logout} />
+			  	}
+
+			    return  (
+			    	<div className="container">
+			    		<TopNav />
+				    	{contents}
+				    </div>
+			    )
+			  }
+			});
+
+			$(function(){
+				React.renderComponent(
+				  <App />,
+				  document.body
+				);
+			});
+		</script>
+	</head>
+	<body>
+	</body>
+</html>
