@@ -30,7 +30,7 @@ class UserTest(unittest.TestCase):
 		data = self.user.getJSON()
 		self.assertEqual(data['username'], 'username')
 		self.assertEqual(data['userID'], self.user.userID)
-		self.assertEqual(data['status'], self.user.status)
+		self.assertEqual(data['status'], 'active')
 
 	def testSetPassword(self):
 		self.user.setPassword("foobar")
@@ -43,7 +43,7 @@ class UserTest(unittest.TestCase):
 		self.assertTrue(user.checkPassword('blech'))
 
 	def testStatusFromJson(self):
-		user = model.User.FromJSON({'username': 'blah', 'password': 'blech', 'status': model.User.STATUS_ARCHIVED})
+		user = model.User.FromJSON({'username': 'blah', 'password': 'blech', 'status': 'archived'})
 		self.assertEqual(user.username, 'blah')
 		self.assertEqual(user.status, model.User.STATUS_ARCHIVED)
 		self.assertTrue(user.checkPassword('blech'))
