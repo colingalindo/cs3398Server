@@ -75,10 +75,23 @@ class User(Base):
     STATUS_ACTIVE = 0
     STATUS_ARCHIVED = 1
 
+    ROLE_STUDENT = 0
+    ROLE_TUTOR = 1
+
     userID = Column(Integer, Sequence('User_id_seq'), primary_key=True)
     username = Column(String, unique=True, nullable=False)
     password = Column(String, nullable=False) # actually the salted hash of the password
+    role = Column(Integer, default=ROLE_STUDENT, nullable=False)
     status = Column(Integer, default=STATUS_ACTIVE)
+
+    ROLE_MAP = {
+        ROLE_STUDENT: 'student',
+        ROLE_TUTOR: 'tutor'
+    }
+
+    ROLE_REVERSE_MAP = {
+        v:k for k,v in ROLE_MAP.items()
+    }
 
     # used to produce more human-readable json responses for status property.
     STATUS_MAP = {
@@ -90,8 +103,9 @@ class User(Base):
         v:k for k,v in STATUS_MAP.items()
     }
 
-    def __init__(self, username, password, status = STATUS_ACTIVE, *args, **kwds):
-        super(User, self).__init__(username=username, password=User.getDigest(password), status=status, *args, **kwds)
+    def __init__(self, username, password, role = ROLE_STUDENT, status = STATUS_ACTIVE, *args, **kwds):
+        print("CONSTRUCTING USER:", username, password, role, status, args, kwds)
+        super(User, self).__init__(username=username, password=User.getDigest(password), role=role, status=status, *args, **kwds)
 
     def archive(self):
         """
@@ -109,15 +123,17 @@ class User(Base):
         """
         Generates a string representation of the user for debugging purposes.
         """
-        return "User(userID=%s, username=%s, password=%s, status=%s)" % (self.userID, self.username, self.password, self.status)
+        return "User(userID=%s, username=%s, password=%s, role=%s, status=%s)" % (self.userID, self.username, self.password, self.role, self.status)
 
     def getJSON(self):
         """
         Returns a json-serializable object for the rest interface.
         """
+        print("GETJSON CALLED:", self)
         return {
             'userID': self.userID,
             'username': self.username,
+            'role': User.ROLE_MAP[self.role],
             'status': User.STATUS_MAP[self.status]
         }
 
@@ -125,9 +141,11 @@ class User(Base):
         """
         Returns a json-serializable object for the rest interface.
         """
+        print("GETMYACCOUNTJSON CALLED:", self)
         return {
             'userID': self.userID,
             'username': self.username,
+            'role': User.ROLE_MAP[self.role],
             'status': User.STATUS_MAP[self.status]
         }
 
@@ -154,6 +172,7 @@ class User(Base):
         """
         handles JSON from a PATCH request to "/MyAccount".
         """
+        print("PATCHMYACCOUNT CALLED:", self)
         MYACCOUNT_PATCH_SCHEMA = {
             'title': '/MyAccount PATCH Schema',
             'type': 'object',
@@ -217,6 +236,9 @@ class User(Base):
                 'password': {
                     'type': 'string'
                 },
+                'role': {
+                    'enum': ['student', 'tutor']
+                },
                 'status': {
                     'enum': ['archived', 'active']
                 }
@@ -226,7 +248,9 @@ class User(Base):
 
         # this will raise an error if the schema does not validate
         jsonschema.validate(jsonData, USER_POST_SCHEMA)
+        print(jsonData)
         jsonData['status'] = User.STATUS_REVERSE_MAP[jsonData.pop('status', 'active')]
+        jsonData['role'] = User.ROLE_REVERSE_MAP[jsonData.pop('role', 'student')]
         return User(**jsonData)
 
 class LogEntry(Base):
@@ -255,7 +279,8 @@ def create_data():
 
         username = "neb"
         password = "foobar"
-        user = User(username, password)
+        role = User.ROLE_TUTOR
+        user = User(username, password, role)
 
         assert(user.checkPassword("foobar"))
 

@@ -1,5 +1,5 @@
 """
-This requires a server to run at http://localhost:5000/. It requires a 
+This requires a server to run at http://localhost:5000/. It requires a
 with the username/password from AUTH_PARAMS and no others.
 """
 
@@ -18,11 +18,14 @@ USER_JSON = {
 		'username': {
 			'type': 'string'
 		},
+		'role': {
+			'enum': ['student', 'tutor']
+		},
 		'status': {
 			'enum': ['active', 'archived']
 		}
 	},
-	'required': ['userID', 'username', 'status']
+	'required': ['userID', 'username', 'role', 'status']
 }
 
 GET_USERS_RESPONSE_SCHEMA = {
@@ -83,7 +86,7 @@ class RestUsersTest(unittest.TestCase):
 		url = API_BASE_URL + "users"
 		user_json = {
 			'username': 'bob',
-			'password': 'baz'
+			'password': 'baz',
 		}
 
 		headers = {'content-type': 'application/json'}

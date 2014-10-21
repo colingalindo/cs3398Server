@@ -16,6 +16,7 @@ class UserTest(unittest.TestCase):
 		self.assertEqual(self.user.username, "username")
 		self.assertTrue(self.user.checkPassword("password"))
 		self.assertEqual(self.user.status, model.User.STATUS_ACTIVE)
+		self.assertEqual(self.user.role, model.User.ROLE_STUDENT)
 
 	def testArchive(self):
 		self.user.archive()
@@ -40,6 +41,7 @@ class UserTest(unittest.TestCase):
 		user = model.User.FromJSON({'username': 'blah', 'password': 'blech'})
 		self.assertEqual(user.username, 'blah')
 		self.assertEqual(user.status, model.User.STATUS_ACTIVE)
+		self.assertEqual(user.role, model.User.ROLE_STUDENT)
 		self.assertTrue(user.checkPassword('blech'))
 
 	def testStatusFromJson(self):
