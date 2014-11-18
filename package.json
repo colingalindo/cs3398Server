@@ -1,0 +1,21 @@
+{
+	"name": "innovationday",
+	"version": "0.0.0",
+	"private": true,
+	"main": "innovationday.js",
+	"dependencies": {
+		"react": "~0.12.0",
+		"react-router": "~0.10.2",
+		"flux": "~2.0.1"
+	},
+	"devDependencies": {
+		"reactify": "~0.16.0",
+		"watchify": "~2.1.1",
+		"browserify": "~6.3.2"
+	},
+	"scripts": {
+		"watchjs": "watchify -v -t reactify innovationday.react.js -o static/js/bundle.js",
+		"server": "python3 innovationday.py",
+		"all": "python3 innovationday.py & watchify -v -t reactify innovationday.react.js -o static/js/bundle.js"
+	}
+}
