@@ -1,10 +1,26 @@
-cs3398Server
-============
+installing:
+==
 
-Server for our cs3398Project
+make sure devDependencies are installed globally.
 
-When commiting please start the commit message with the JIRA ticket number, git commit -m"CS-?? Did this or whatever" files/to/commit
+run "npm install" to install javascript dependencies.
 
-This project is built on python 3 with flask and sqlalchemy.
+run "pip3 install -r requirements" to install python dependencies.
 
-[![Build Status](http://jenkins.colingalindo.ddns.us/buildStatus/icon?job=cs3398Server)](http://jenkins.colingalindo.ddns.us/job/cs3398Server/)
+
+running a server
+==
+
+enable python virtual environment: source env/bin/activate
+
+python server: python3 innovationday.py
+
+javascript compiler: watchify -v -t reactify innovationday.react.js -o static/js/bundle.js
+
+
+useful links
+==
+
+http://flask.pocoo.org/docs/0.10/
+
+http://docs.sqlalchemy.org/en/rel_0_9/
