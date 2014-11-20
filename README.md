@@ -24,3 +24,7 @@ useful links
 http://flask.pocoo.org/docs/0.10/
 
 http://docs.sqlalchemy.org/en/rel_0_9/
+
+build status
+==
+[![Build Status](http://jenkins.colingalindo.ddns.us/buildStatus/icon?job=cs3398Server)](http://jenkins.colingalindo.ddns.us/job/cs3398Server/)
