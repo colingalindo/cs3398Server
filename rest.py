@@ -152,3 +152,26 @@ def post_appointments(session, currentUser):
 	data = flask.request.get_json()
 	result = controller.post_appointment(data)
 	return flask.jsonify(result)
+
+@api.route('/appointments/<appointment_id>',methods=['PUT'] )
+@requires_auth
+def put_appointment(session, currentUser, appointment_id):
+	controller = AppointmentController(session)
+	data = flask.request.get_json()
+	try:
+		res = flask.jsonify(controller.put_appointment(appointment_id, data))
+	except NoResultFound:
+		res = flask.jsonify(status='error', errors=['could not find appointment'])
+		res.status_code = 404
+	return res
+
+@api.route('/appointments/<appointment_id>',methods=['GET'] )
+@requires_auth
+def get_appointment(session, currentUser, appointment_id):
+	controller = AppointmentController(session)
+	try:
+		res = flask.jsonify(controller.get_appointment(appointment_id))
+	except NoResultFound:
+		res = flask.jsonify(status='error', errors=['could not find appointment'])
+		res.status_code = 404
+	return res

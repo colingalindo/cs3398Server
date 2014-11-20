@@ -22,9 +22,13 @@ class AppointmentController(object):
     def put_appointment(self, appointment_id, data):
         appointments = self.session.query(Appointment).filter(Appointment.id == appointment_id)
         appointment = appointments.one()
-        if 'tutorID' in data:
-            appointment.tutorID = data['tutorID']
-        self.session.add(apointment)
+        if 'name' in data:
+            appointment.name = data['name']
+        if 'start_time' in data:
+            appointment.start_time = data['start_time']
+        if 'end_time' in data:
+            appointment.end_time = data['end_time']
+        self.session.add(appointment)
         return appointment.toJSON()
 
     def get_appointment(self, appointment_id):
