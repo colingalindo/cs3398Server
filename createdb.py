@@ -6,7 +6,7 @@ from model.appointment import Appointment
 
 def create_data():
     with session_scope() as session:
-        if session.query(User).filter(User.username == "neb").count() != 0:
+        if session.query(User).filter(User.username == "admin").count() != 0:
             return
 
         username = "admin"

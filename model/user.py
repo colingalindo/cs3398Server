@@ -122,7 +122,7 @@ class User(Base):
                     'type': 'string'
                 },
                 'email': {
-                    'type': 'email'
+                    'type': 'string'
                 },
                 'work_number': {
                     'type': 'string'
