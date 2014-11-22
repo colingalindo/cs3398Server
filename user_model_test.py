@@ -34,7 +34,7 @@ class UserTest(unittest.TestCase):
 		data = self.user.toJSON()
 		self.assertEqual(data['username'], 'username')
 		self.assertEqual(data['fullname'], 'fullname')
-		self.assertEqual(data['userID'], self.user.id)
+		self.assertEqual(data['user_id'], self.user.id)
 		self.assertEqual(data['status'], 'active')
 		self.assertEqual(data['role'], 'student')
 
