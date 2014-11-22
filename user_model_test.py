@@ -15,7 +15,7 @@ class UserTest(unittest.TestCase):
 		session.commit()
 
 	def testConstructor(self):
-		self.assertEqual(self.user.username, "username")
+		self.assertEqual(self.user.username, "u1sername")
 		self.assertTrue(self.user.checkPassword("password"))
 		self.assertEqual(self.user.fullname, "fullname")
 		self.assertEqual(self.user.status, User.STATUS_ACTIVE)
