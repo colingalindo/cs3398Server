@@ -9,9 +9,9 @@ class Appointment(Base):
 
     id = Column(Integer, primary_key=True)
     tutor_id = Column(Integer, ForeignKey('users.id'))
-    name = Column(String)
-    start_time = Column(String)
-    end_time = Column(String)
+    name = Column(String(100))
+    start_time = Column(String(19))
+    end_time = Column(String(19))
 
     def __init__(self, tutor_id, name, start_time, end_time, *args, **kwds):
         super(Appointment, self).__init__(tutor_id=tutor_id, name=name, start_time=start_time, end_time=end_time, *args, **kwds)
@@ -24,8 +24,8 @@ class Appointment(Base):
         Returns a json-serializable object for the rest interface.
         """
         return {
-            'appointmentID': self.id,
-            'tutorID': self.tutor_id,
+            'appointment_id': self.id,
+            'tutor_id': self.tutor_id,
             'name': self.name,
             'start_time': self.start_time,
             'end_time': self.end_time

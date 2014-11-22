@@ -19,12 +19,12 @@ class User(Base):
     ROLE_TUTOR = 1
 
     id = Column(Integer, primary_key=True)
-    username = Column(String, unique=True)
-    fullname = Column(String)
-    password = Column(String)
-    email = Column(String)
-    work_number = Column(String)
-    mobile_number = Column(String)
+    username = Column(String(32), unique=True)
+    fullname = Column(String(64))
+    password = Column(String(32))
+    email = Column(String(64))
+    work_number = Column(String(10))
+    mobile_number = Column(String(10))
     role = Column(Integer, default=ROLE_STUDENT, nullable=False)
     status = Column(Integer, default=STATUS_ACTIVE)
 
@@ -92,7 +92,7 @@ class User(Base):
         Returns a json-serializable object for the rest interface.
         """
         return {
-            'userID': self.id,
+            'user_id': self.id,
             'username': self.username,
             'fullname': self.fullname,
             'email': self.email,
