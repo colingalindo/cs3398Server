@@ -5,7 +5,7 @@ from model.base import Session, session_scope, Base, create_engine, create_schem
 import jsonschema
 from datetime import datetime
 
-class UserTest(unittest.TestCase):
+class AppointmentTest(unittest.TestCase):
 	def setUp(self):
 		create_engine('sqlite:///:memory:?check_same_thread=False', echo=True)
 		create_schema()
