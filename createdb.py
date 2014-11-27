@@ -18,8 +18,9 @@ def create_data():
 
         session.add(user)
 
-if os.path.isfile('test.db'):
-    os.remove('test.db')
-model.base.create_engine('sqlite:///test.db?check_same_thread=False', echo=True)
+#if os.path.isfile('test.db'):
+#    os.remove('test.db')
+model.base.create_engine('mysql+pymysql://admin:7NgM6Tx2JhaaJe@cs3398.coa3qiflo7sn.us-west-2.rds.amazonaws.com/cs3398', echo=True)
+#model.base.create_engine('sqlite:///test.db?check_same_thread=False', echo=True)
 model.base.create_schema()
 create_data()
