@@ -10,7 +10,7 @@ class UserTest(unittest.TestCase):
 		create_schema()
 
 		session = Session()
-		self.user = User("username", "password", "fullname")
+		self.user = User("username", "password", "fullname", "test@test.com", "5555555555", "5555555556")
 		session.add(self.user)
 		session.commit()
 
@@ -18,6 +18,9 @@ class UserTest(unittest.TestCase):
 		self.assertEqual(self.user.username, "username")
 		self.assertTrue(self.user.checkPassword("password"))
 		self.assertEqual(self.user.fullname, "fullname")
+		self.assertEqual(self.user.email, "test@test.com")
+		self.assertEqual(self.user.work_number, "5555555555")
+		self.assertEqual(self.user.mobile_number, "5555555556")
 		self.assertEqual(self.user.status, User.STATUS_ACTIVE)
 		self.assertEqual(self.user.role, User.ROLE_STUDENT)
 
@@ -35,6 +38,9 @@ class UserTest(unittest.TestCase):
 		self.assertEqual(data['username'], 'username')
 		self.assertEqual(data['fullname'], 'fullname')
 		self.assertEqual(data['user_id'], self.user.id)
+		self.assertEqual(data['email'], 'test@test.com')
+		self.assertEqual(data['work_number'], '5555555555')
+		self.assertEqual(data['mobile_number'], '5555555556')
 		self.assertEqual(data['status'], 'active')
 		self.assertEqual(data['role'], 'student')
 
