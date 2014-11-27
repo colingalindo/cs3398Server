@@ -43,9 +43,12 @@ class UserTest(unittest.TestCase):
 		self.assertTrue(self.user.checkPassword("foobar"))
 
 	def testFromJson(self):
-		user = User.FromJSON({'username': 'blah', 'password': 'blech', 'fullname': 'name 1'})
+		user = User.FromJSON({'username': 'blah', 'password': 'blech', 'fullname': 'name 1', 'email': 'name.1@email.com', 'work_number': '5554443333', 'mobile_number': '5553334444'})
 		self.assertEqual(user.username, 'blah')
 		self.assertEqual(user.fullname, 'name 1')
+		self.assertEqual(user.email, 'name.1@email.com')
+		self.assertEqual(user.work_number, '5554443333')
+		self.assertEqual(user.mobile_number, '5553334444')
 		self.assertEqual(user.status, User.STATUS_ACTIVE)
 		self.assertEqual(user.role, User.ROLE_STUDENT)
 		self.assertTrue(user.checkPassword('blech'))
