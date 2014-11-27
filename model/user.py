@@ -21,7 +21,7 @@ class User(Base):
     id = Column(Integer, primary_key=True)
     username = Column(String(32), unique=True)
     fullname = Column(String(64))
-    password = Column(String(32))
+    password = Column(String(256))
     email = Column(String(64))
     work_number = Column(String(10))
     mobile_number = Column(String(10))
@@ -50,8 +50,8 @@ class User(Base):
         v:k for k,v in STATUS_MAP.items()
     }
 
-    def __init__(self, username, password, fullname, role = ROLE_STUDENT, status = STATUS_ACTIVE, *args, **kwds):
-        super(User, self).__init__(username=username, password=User.getDigest(password), fullname=fullname, role=role, status=status, *args, **kwds)
+    def __init__(self, username, password, fullname, email=None, work_number=None, mobile_number=None, role = ROLE_STUDENT, status = STATUS_ACTIVE, *args, **kwds):
+        super(User, self).__init__(username=username, password=User.getDigest(password), fullname=fullname, email=email, work_number=work_number, mobile_number=mobile_number, role=role, status=status, *args, **kwds)
 
     def __repr__(self):
        return "<User(username='%s', password='%s', fullname='%s', email='%s', work_number='%s', mobile_number='%s', role=%s, status=%s)>" % (self.username, self.password, self.fullname, self.email, self.work_number, self.mobile_number, self.role, self.status)
