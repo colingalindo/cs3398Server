@@ -12,20 +12,35 @@ import json
 USER_JSON = {
 	'type': 'object',
 	'properties': {
-		'userID': {
-			'type': 'integer',
+		'user_id': {
+			'type': 'Integer'
 		},
 		'username': {
 			'type': 'string'
 		},
+		'password': {
+			'type': 'string'
+		},
+		'fullname': {
+			'type': 'string'
+		},
+		'email': {
+			'type': 'string'
+		},
+		'work_number': {
+			'type': 'string'
+		},
+		'mobile_number': {
+			'type': 'string'
+		},
 		'role': {
-			'enum': ['student', 'tutor']
+			'enum': ['client', 'tutor']
 		},
 		'status': {
 			'enum': ['active', 'archived']
 		}
 	},
-	'required': ['userID', 'username', 'role', 'status']
+	'required': ['username', 'password', 'fullname']
 }
 
 GET_USERS_RESPONSE_SCHEMA = {
@@ -69,8 +84,8 @@ POST_USERS_RESPONSE_SCHEMA = {
 
 # This needs to be run against an existing server at the following url base URL
 SERVER_BASE_URL = "http://localhost:5000/"
-API_BASE_URL = SERVER_BASE_URL + "api/v1.0/"
-AUTH_PARAMS = ('neb', 'foobar')
+API_BASE_URL = SERVER_BASE_URL + "api/"
+AUTH_PARAMS = ('admin', 'adminpw')
 
 class RestUsersTest(unittest.TestCase):
 	def testGetUsers(self):
@@ -87,6 +102,7 @@ class RestUsersTest(unittest.TestCase):
 		user_json = {
 			'username': 'bob',
 			'password': 'baz',
+			'fullname': 'bob baze'
 		}
 
 		headers = {'content-type': 'application/json'}
@@ -104,7 +120,7 @@ class RestUsersTest(unittest.TestCase):
 
 		# delete bob.
 		params={'debug_delete':True}
-		response = requests.delete(url + "/" + str(data['user']['userID']), auth=AUTH_PARAMS, headers=headers, params=params)
+		response = requests.delete(url + "/" + str(data['user']['user_id']), auth=AUTH_PARAMS, headers=headers, params=params)
 		self.assertEqual(response.status_code, 200)
 
 	def testPutUser(self):
